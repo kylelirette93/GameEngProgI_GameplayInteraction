@@ -8,6 +8,14 @@ public class QuestManager : MonoBehaviour
     public List<Quest> quests = new List<Quest>();
     public QuestUI QuestUI;
 
+    private void Start()
+    {
+        if (QuestUI == null)
+        {
+            QuestUI = FindObjectOfType<QuestUI>();
+        }
+    }
+
 
     public void CompleteQuest(string title)
     {
@@ -20,16 +28,21 @@ public class QuestManager : MonoBehaviour
             if (QuestUI != null && quest.isCompleted)
             {
                 StartCoroutine(QuestUI.DisplayCompletion(quest));
-                // Remove the completed quest.
+
                 quests.Remove(quest);
             }
-            }
         }
+    }
 
     public List<Quest> GetActiveQuests()
     {
         // Search through and return all quests that are not completed.
         return quests.FindAll(q => !q.isCompleted);
+    }
+
+    public void RemoveQuest(Quest quest)
+    {
+        quests.Remove(quest);
     }
 
 }

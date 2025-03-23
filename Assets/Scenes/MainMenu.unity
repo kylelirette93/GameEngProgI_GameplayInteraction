@@ -279,6 +279,10 @@ PrefabInstance:
       propertyPath: quests.Array.data[0].requiredItem
       value: 
       objectReference: {fileID: 11400000, guid: db8012bb3d6a2e642b9459e030b07277, type: 2}
+    - target: {fileID: 6738312938187730780, guid: 26013ba5ca95cea4d9388ca60796f740, type: 3}
+      propertyPath: inventory
+      value: 
+      objectReference: {fileID: 1268438503}
     - target: {fileID: 7523074889354648079, guid: 26013ba5ca95cea4d9388ca60796f740, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.046887636
@@ -319,11 +323,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7660113213372827109, guid: 26013ba5ca95cea4d9388ca60796f740, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -15.550049
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26013ba5ca95cea4d9388ca60796f740, type: 3}
+--- !u!114 &1268438503 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 379926732095060858, guid: 26013ba5ca95cea4d9388ca60796f740, type: 3}
+  m_PrefabInstance: {fileID: 1172511531}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a811317a92856b40a061b458c98568a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1921430395
 GameObject:
   m_ObjectHideFlags: 0

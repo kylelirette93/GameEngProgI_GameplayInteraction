@@ -10,12 +10,11 @@ public class QuestUI : MonoBehaviour
 
     public TextMeshProUGUI questListText;
     private QuestManager questManager;
-    Inventory inventory;
+    public Inventory inventory;
 
     private void Start()
     {
         questManager = FindObjectOfType<QuestManager>();
-        inventory = FindObjectOfType<Inventory>();
         UpdateQuestList();
     }
 
@@ -38,12 +37,14 @@ public class QuestUI : MonoBehaviour
     {
         // Display a temporary message when quest is completed.
         gameObject.SetActive(true);
-        
+
         if (inventory != null)
         {
+            Debug.Log("Calling RemoveQuestItemsFromInventory");
             RemoveQuestItemsFromInventory(completedQuest);
         }
-        questListText.text = "Quest completed, you earned 5 gold!";
+
+        questListText.text = $"Quest completed, you earned {completedQuest.reward} gold!";
         yield return new WaitForSeconds(3f);
         UpdateQuestList();
         gameObject.SetActive(false);

@@ -25,18 +25,4 @@ public class Quest
             isCompleted = true;
         }
     }
-
-    public void TurnInQuest()
-    {
-        if (isCompleted)
-        {
-            // Handle reward logic here (e.g., give gold, remove items)
-            Debug.Log("Quest turned in: " + title + ", Reward: " + reward);
-            // ... your reward code ...
-        }
-        else
-        {
-            Debug.Log("Quest not yet completed: " + title);
-        }
-    }
 }

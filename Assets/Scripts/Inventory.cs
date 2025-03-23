@@ -28,7 +28,7 @@ public class Inventory : MonoBehaviour
         {
             if (items[i] == itemToRemove && removedCount < amount)
             {
-                Debug.Log("Removing item: " + itemToRemove.itemName);
+                // Debug.Log("Removing item: " + itemToRemove.itemName);
                 items.RemoveAt(i);
                 removedCount++;
             }

@@ -10,17 +10,24 @@ public class Interactable : MonoBehaviour, IInteractable
 {
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
-    private Color highlightColor = Color.green;
+    private Color highlightColor = Color.white;
 
     [Header("Interactable Settings")]
     public InteractableType type;
     public ItemData itemData;
     Inventory inventory;
+    bool isPickedUp = false;
 
     public InteractableType InteractionType => type;
 
 
-    
+    void OnEnable()
+    {
+        if (isPickedUp)
+        {
+           gameObject.SetActive(false);
+        }
+    }
 
     void Start()
     {
@@ -61,11 +68,12 @@ public class Interactable : MonoBehaviour, IInteractable
     {
         if (inventory != null)
         {
-            inventory.AddItem(itemData);
-            if (GameManager.Instance.questManager.quests.Count > 0)
+            if (GameManager.Instance.questManager.quests[itemData.questIndex].isRecieved)
             {
+                inventory.AddItem(itemData);
                 GameManager.Instance.questManager.quests[itemData.questIndex].collected += 1;
                 GameManager.Instance.questManager.QuestUI.UpdateQuestList();
+                isPickedUp = true;
                 gameObject.SetActive(false);
             }
         }

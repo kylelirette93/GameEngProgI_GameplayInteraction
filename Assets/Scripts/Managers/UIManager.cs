@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject questPanel;
     public TextMeshProUGUI interactionText;
+    public TextMeshProUGUI interactionPrompt;
 
     public void EnableMainMenuUI()
     {

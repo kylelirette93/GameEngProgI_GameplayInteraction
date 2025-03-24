@@ -11,10 +11,6 @@ public enum InteractableType
 }
 public class Interactable : MonoBehaviour, IInteractable
 {
-    private SpriteRenderer spriteRenderer;
-    private Color originalColor;
-    private Color highlightColor = Color.white;
-
     [Header("Interactable Settings")]
     public InteractableType type;
     public ItemData itemData;
@@ -38,12 +34,10 @@ public class Interactable : MonoBehaviour, IInteractable
     void Start()
     {
         inventory = FindObjectOfType<Inventory>();
-        interactPrompt = GameObject.Find("InteractPrompt");
+        interactPrompt = GameManager.Instance.UIManager.interactionPrompt.gameObject;
     }
     public void Interact()
     {
-        Debug.Log("Interacting with " + gameObject.name);
-
         switch (type)
         {
             case InteractableType.Nothing:
@@ -57,7 +51,7 @@ public class Interactable : MonoBehaviour, IInteractable
                 }
                 break;
             case InteractableType.Info:
-                Info();
+                DisplayPrompt();
                 break;
             default:
                 Nothing();
@@ -81,7 +75,7 @@ public class Interactable : MonoBehaviour, IInteractable
                 GameManager.Instance.questManager.QuestUI.UpdateQuestList();
 
                 isPickedUp[itemId] = true;
-                interactPrompt.SetActive(false);
+                interactPrompt.GetComponent<TextMeshProUGUI>().text = "";
                 gameObject.SetActive(false);
             }
         }
@@ -92,17 +86,31 @@ public class Interactable : MonoBehaviour, IInteractable
         GameManager.Instance.UIManager.SetInteractionText(itemData.infoMessage);
     } 
 
-    private void DisplayPrompt()
+    public void DisplayPrompt()
     {
         if (interactPrompt != null)
         {
             interactPrompt.SetActive(true);
             TextMeshProUGUI textObj = interactPrompt.GetComponent<TextMeshProUGUI>();
-            textObj.text = "Press    <sprite index=0>to pickup.\r\n";
-            if (Input.GetKeyDown(KeyCode.Space))
+
+            textObj.text = "Press    <sprite index=0>to interact.\r\n";
+
+            if (Input.GetKeyDown(KeyCode.Space) && type == InteractableType.Pickup)
             {
                 Pickup();
             }
+            if (Input.GetKeyDown(KeyCode.Space) && type == InteractableType.Info)
+            {
+                Info();
+            }
+        }
+    }
+
+    public void DisablePrompt()
+    {
+        if (interactPrompt != null)
+        {
+            interactPrompt.SetActive(false);
         }
     }
 }

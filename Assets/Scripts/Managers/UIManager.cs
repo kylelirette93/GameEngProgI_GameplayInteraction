@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public GameObject questPanel;
     public TextMeshProUGUI interactionText;
     public TextMeshProUGUI interactionPrompt;
+    public Inventory inventory;
 
     public void EnableMainMenuUI()
     {
@@ -56,6 +57,7 @@ public class UIManager : MonoBehaviour
     {
         if (text != null)
         {
+            // Debug.Log("SetInteractionText called with message: " + text);
             interactionText.text = text;
             StartCoroutine(FadeText(text));
         }

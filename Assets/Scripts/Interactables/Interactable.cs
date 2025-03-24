@@ -18,6 +18,7 @@ public class Interactable : MonoBehaviour, IInteractable
     GameObject interactPrompt;
     [SerializeField] string itemId;
 
+    // Static dictionary to store whether an interactable has been picked up.
     static Dictionary<string, bool> isPickedUp = new Dictionary<string, bool>(); 
 
     public InteractableType InteractionType => type;
@@ -33,7 +34,7 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void Start()
     {
-        inventory = FindObjectOfType<Inventory>();
+        inventory = GameManager.Instance.UIManager.inventory;
         interactPrompt = GameManager.Instance.UIManager.interactionPrompt.gameObject;
     }
     public void Interact()
@@ -44,6 +45,7 @@ public class Interactable : MonoBehaviour, IInteractable
                 Nothing();
                 break;
             case InteractableType.Pickup:
+                // Check if pickup is required for a quest, if so display prompt.
                 if (GameManager.Instance.questManager.quests[itemData.questIndex].isRecieved
                     && GameManager.Instance.questManager.quests[itemData.questIndex].requiredItem == itemData)
                 {
@@ -83,8 +85,9 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public void Info()
     {
+        // Set the floating text above player's head.
         GameManager.Instance.UIManager.SetInteractionText(itemData.infoMessage);
-    } 
+    }
 
     public void DisplayPrompt()
     {
@@ -93,15 +96,20 @@ public class Interactable : MonoBehaviour, IInteractable
             interactPrompt.SetActive(true);
             TextMeshProUGUI textObj = interactPrompt.GetComponent<TextMeshProUGUI>();
 
-            textObj.text = "Press    <sprite index=0>to interact.\r\n";
+            textObj.text = "Press <sprite index=0> to interact.\r\n";
 
-            if (Input.GetKeyDown(KeyCode.Space) && type == InteractableType.Pickup)
+            //Debug.Log("DisplayPrompt called. Space key down: " + Input.GetKeyDown(KeyCode.Space));
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                Pickup();
-            }
-            if (Input.GetKeyDown(KeyCode.Space) && type == InteractableType.Info)
-            {
-                Info();
+                if (type == InteractableType.Pickup)
+                {
+                    Pickup();
+                }
+                else if (type == InteractableType.Info)
+                {
+                    //Debug.Log("Calling Info()");
+                    Info();
+                }
             }
         }
     }

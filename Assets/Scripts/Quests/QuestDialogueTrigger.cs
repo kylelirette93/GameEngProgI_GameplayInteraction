@@ -22,7 +22,7 @@ public class QuestDialogueTrigger : MonoBehaviour
             Quest quest = GameManager.Instance.questManager.quests.Find(q => q.title == Title);
 
             // Check if quest has already triggered, if not display dialogue.
-            if (quest != null && !hasTriggered)
+            if (quest != null && !quest.isCompleted && !hasTriggered)
             {
                 GameManager.Instance.dialogueManager.DialogueLines = questDialogue;
                 hasTriggered = true;

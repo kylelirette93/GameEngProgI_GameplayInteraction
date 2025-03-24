@@ -4491,6 +4491,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1742028118383737108, guid: 290060ca632dae14a9af755a2322967a, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1742028118383737108, guid: 290060ca632dae14a9af755a2322967a, type: 3}
+      propertyPath: m_MaskInteraction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1742028118383737108, guid: 290060ca632dae14a9af755a2322967a, type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1742028118383737108, guid: 290060ca632dae14a9af755a2322967a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
     - target: {fileID: 6116263098289970456, guid: 290060ca632dae14a9af755a2322967a, type: 3}
       propertyPath: itemData
       value: 

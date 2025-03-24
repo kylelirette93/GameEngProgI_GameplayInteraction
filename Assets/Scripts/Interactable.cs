@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public enum InteractableType
@@ -16,27 +17,12 @@ public class Interactable : MonoBehaviour, IInteractable
     public InteractableType type;
     public ItemData itemData;
     Inventory inventory;
-    bool isPickedUp = false;
 
     public InteractableType InteractionType => type;
-
-
-    void OnEnable()
-    {
-        if (isPickedUp)
-        {
-           gameObject.SetActive(false);
-        }
-    }
 
     void Start()
     {
         inventory = FindObjectOfType<Inventory>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null)
-        {
-            originalColor = spriteRenderer.color;
-        }
     }
     public void Interact()
     {
@@ -73,7 +59,6 @@ public class Interactable : MonoBehaviour, IInteractable
                 inventory.AddItem(itemData);
                 GameManager.Instance.questManager.quests[itemData.questIndex].collected += 1;
                 GameManager.Instance.questManager.QuestUI.UpdateQuestList();
-                isPickedUp = true;
                 gameObject.SetActive(false);
             }
         }
@@ -82,13 +67,5 @@ public class Interactable : MonoBehaviour, IInteractable
     public void Info()
     {
         GameManager.Instance.UIManager.SetInteractionText(itemData.infoMessage);
-    }
-
-    public void Highlight(bool enable)
-    {
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.color = enable ? highlightColor : originalColor;
-        }
-    }
+    } 
 }

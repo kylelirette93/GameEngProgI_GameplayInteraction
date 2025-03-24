@@ -13,7 +13,6 @@ public class InteractionController : MonoBehaviour
             interactable = other.GetComponent<IInteractable>();
             if (interactable != null)
             {
-                interactable.Highlight(true);
                 interactable.Interact();
             }
         }
@@ -23,10 +22,6 @@ public class InteractionController : MonoBehaviour
     {
         if (other.CompareTag("InteractObj"))
         {
-            if (interactable != null)
-            {
-                interactable.Highlight(false);
-            }
             interactable = null;
         }
     }

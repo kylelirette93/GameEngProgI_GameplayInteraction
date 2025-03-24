@@ -267,6 +267,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1998724832572121138, guid: 26013ba5ca95cea4d9388ca60796f740, type: 3}
+      propertyPath: m_text
+      value: 'Active Quests:'
+      objectReference: {fileID: 0}
     - target: {fileID: 2360053793626550283, guid: 26013ba5ca95cea4d9388ca60796f740, type: 3}
       propertyPath: m_IsActive
       value: 0

@@ -27,9 +27,7 @@ public class QuestManager : MonoBehaviour
             // Temporarily display the quest is completed, for feedback.
             if (QuestUI != null && quest.isCompleted)
             {
-                StartCoroutine(QuestUI.DisplayCompletion(quest));
-
-                quests.Remove(quest);
+                StartCoroutine(QuestUI.DisplayCompletion(quest, this));
             }
         }
     }

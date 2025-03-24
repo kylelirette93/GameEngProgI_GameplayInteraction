@@ -15,7 +15,6 @@ public class QuestUI : MonoBehaviour
     private void Start()
     {
         questManager = FindObjectOfType<QuestManager>();
-        UpdateQuestList();
     }
 
     public void UpdateQuestList()
@@ -25,7 +24,7 @@ public class QuestUI : MonoBehaviour
         {
             foreach (Quest quest in questManager.GetActiveQuests())
             {
-                if (quest != null && quest.isRecieved)
+                if (quest != null && quest.isRecieved && !quest.isCompleted)
                 {
                     questListText.text += "- " + quest.title + ": " + quest.description + "\n" + "Collected: " + quest.collected + "/" + quest.condition;
                 }
@@ -33,21 +32,22 @@ public class QuestUI : MonoBehaviour
         }
     }
 
-    public IEnumerator DisplayCompletion(Quest completedQuest)
+    public IEnumerator DisplayCompletion(Quest completedQuest, QuestManager questManager)
     {
         // Display a temporary message when quest is completed.
         gameObject.SetActive(true);
-
+        questListText.text = $"Quest completed, you earned {completedQuest.reward} gold!";
         if (inventory != null)
         {
             Debug.Log("Calling RemoveQuestItemsFromInventory");
             RemoveQuestItemsFromInventory(completedQuest);
         }
 
-        questListText.text = $"Quest completed, you earned {completedQuest.reward} gold!";
+        
         yield return new WaitForSeconds(3f);
         UpdateQuestList();
         gameObject.SetActive(false);
+        questManager.quests.Remove(completedQuest);
     }
 
     private void RemoveQuestItemsFromInventory(Quest completedQuest)

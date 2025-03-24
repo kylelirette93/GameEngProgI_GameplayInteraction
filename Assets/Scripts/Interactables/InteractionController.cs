@@ -6,7 +6,7 @@ public class InteractionController : MonoBehaviour
 {
     public IInteractable interactable = null;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("InteractObj"))
         {
@@ -15,6 +15,14 @@ public class InteractionController : MonoBehaviour
             {
                 interactable.Interact();
             }
+        }
+    }
+
+    private void Update()
+    {
+        if (interactable != null)
+        {
+            interactable.Interact();
         }
     }
 

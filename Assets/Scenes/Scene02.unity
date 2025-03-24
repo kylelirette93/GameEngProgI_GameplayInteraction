@@ -4280,6 +4280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   itemData: {fileID: 0}
+  itemId: 
 --- !u!58 &100650963
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4431,6 +4432,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6116263098289970456, guid: 290060ca632dae14a9af755a2322967a, type: 3}
+      propertyPath: itemId
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6116263098289970456, guid: 290060ca632dae14a9af755a2322967a, type: 3}
       propertyPath: itemData
       value: 
       objectReference: {fileID: 11400000, guid: db8012bb3d6a2e642b9459e030b07277, type: 2}
@@ -4507,6 +4512,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+    - target: {fileID: 6116263098289970456, guid: 290060ca632dae14a9af755a2322967a, type: 3}
+      propertyPath: itemId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6116263098289970456, guid: 290060ca632dae14a9af755a2322967a, type: 3}
       propertyPath: itemData
       value: 
@@ -4787,6 +4796,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6116263098289970456, guid: 290060ca632dae14a9af755a2322967a, type: 3}
+      propertyPath: itemId
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6116263098289970456, guid: 290060ca632dae14a9af755a2322967a, type: 3}
       propertyPath: itemData
       value: 
       objectReference: {fileID: 11400000, guid: db8012bb3d6a2e642b9459e030b07277, type: 2}
@@ -5027,6 +5040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   itemData: {fileID: 0}
+  itemId: 
 --- !u!58 &1876035423
 CircleCollider2D:
   m_ObjectHideFlags: 0

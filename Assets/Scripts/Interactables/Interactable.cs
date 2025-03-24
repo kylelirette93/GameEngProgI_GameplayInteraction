@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public enum InteractableType
@@ -17,16 +19,29 @@ public class Interactable : MonoBehaviour, IInteractable
     public InteractableType type;
     public ItemData itemData;
     Inventory inventory;
+    GameObject interactPrompt;
+    [SerializeField] string itemId;
+
+    static Dictionary<string, bool> isPickedUp = new Dictionary<string, bool>(); 
 
     public InteractableType InteractionType => type;
+
+    
+    void OnEnable()
+    {
+        if (isPickedUp.ContainsKey(itemId)) 
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
     void Start()
     {
         inventory = FindObjectOfType<Inventory>();
+        interactPrompt = GameObject.Find("InteractPrompt");
     }
     public void Interact()
     {
-        DisplayPrompt();
         Debug.Log("Interacting with " + gameObject.name);
 
         switch (type)
@@ -35,7 +50,11 @@ public class Interactable : MonoBehaviour, IInteractable
                 Nothing();
                 break;
             case InteractableType.Pickup:
-                Pickup();
+                if (GameManager.Instance.questManager.quests[itemData.questIndex].isRecieved
+                    && GameManager.Instance.questManager.quests[itemData.questIndex].requiredItem == itemData)
+                {
+                    DisplayPrompt();
+                }
                 break;
             case InteractableType.Info:
                 Info();
@@ -60,6 +79,9 @@ public class Interactable : MonoBehaviour, IInteractable
                 inventory.AddItem(itemData);
                 GameManager.Instance.questManager.quests[itemData.questIndex].collected += 1;
                 GameManager.Instance.questManager.QuestUI.UpdateQuestList();
+
+                isPickedUp[itemId] = true;
+                interactPrompt.SetActive(false);
                 gameObject.SetActive(false);
             }
         }
@@ -72,6 +94,15 @@ public class Interactable : MonoBehaviour, IInteractable
 
     private void DisplayPrompt()
     {
-
+        if (interactPrompt != null)
+        {
+            interactPrompt.SetActive(true);
+            TextMeshProUGUI textObj = interactPrompt.GetComponent<TextMeshProUGUI>();
+            textObj.text = "Press    <sprite index=0>to pickup.\r\n";
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Pickup();
+            }
+        }
     }
 }

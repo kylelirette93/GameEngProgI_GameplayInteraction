@@ -7,7 +7,8 @@ public enum InteractableType
 {
     Nothing,
     Pickup,
-    Info
+    Info,
+    Dialogue
 }
 public class Interactable : MonoBehaviour, IInteractable
 {
@@ -17,6 +18,11 @@ public class Interactable : MonoBehaviour, IInteractable
     Inventory inventory;
     GameObject interactPrompt;
     [SerializeField] string itemId;
+
+    [Header("Dialogue Settings")]
+    [TextArea] public string[] sentences;
+
+    DialogueManager dialogueManager;
 
     // Static dictionary to store whether an interactable has been picked up.
     static Dictionary<string, bool> isPickedUp = new Dictionary<string, bool>(); 
@@ -36,6 +42,7 @@ public class Interactable : MonoBehaviour, IInteractable
     {
         inventory = GameManager.Instance.UIManager.inventory;
         interactPrompt = GameManager.Instance.UIManager.interactionPrompt.gameObject;
+        dialogueManager = GameManager.Instance.dialogueManager.GetComponent<DialogueManager>();
     }
     public void Interact()
     {
@@ -54,6 +61,9 @@ public class Interactable : MonoBehaviour, IInteractable
                 break;
             case InteractableType.Info:
                 DisplayPrompt();
+                break;
+            case InteractableType.Dialogue:
+                dialogueManager.StartDialogue(sentences);
                 break;
             default:
                 Nothing();

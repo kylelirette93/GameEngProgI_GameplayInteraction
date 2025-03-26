@@ -1,30 +1,70 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
     public GameObject dialoguePanel;
     public string[] DialogueLines;
     public TextMeshProUGUI dialogueText;
+    private Queue<string> dialogue;
 
-    public void DisplayDialogue()
+    private void Start()
     {
+        dialogue = new Queue<string>();
+    }
+    /*public void DisplayDialogue()
+    {
+        if (dialogue != null && dialogue.Count > 0)
+        {
+            dialoguePanel.SetActive(true);
+            StartCoroutine(DisplayDialogueCoroutine());
+        }
         if (DialogueLines != null && DialogueLines.Length > 0)
         {
             dialoguePanel.SetActive(true);
             // Debug.Log("Activating dialogue panel");
             StartCoroutine(DisplayDialogueCoroutine());
-        }    
+        }
+    }*/
+
+    public void StartDialogue(string[] sentences)
+    {
+        dialogue.Clear();
+        dialoguePanel.SetActive(true);
+        // Queue the dialogue.
+        foreach (string currentString in sentences)
+        {          
+             dialogue.Enqueue(currentString);     
+        }
+       
+        DisplayNextSentence();        
     }
 
-    private IEnumerator DisplayDialogueCoroutine()
+    public void DisplayNextSentence()
     {
-        Time.timeScale = 0f;
-        foreach (string line in DialogueLines)
+        if (dialogue.Count == 0) EndSentence();
+
+        // Debug.Log("Button being clicked");
+        if (dialogue.Count > 0)
         {
-            dialogueText.text = dialogueText.text + "\n";
-            foreach (char letter in line)             
+            string currentSentence = dialogue.Dequeue();
+            StartCoroutine(DisplayDialogueCoroutine(currentSentence));
+        }
+    }
+
+    public void EndSentence()
+    {
+        dialogue.Clear();
+        dialogueText.text = "";
+        dialoguePanel.SetActive(false);
+    }
+    private IEnumerator DisplayDialogueCoroutine(string currentSentence)
+    {
+            Time.timeScale = 0f;        
+            foreach (char letter in currentSentence)
             {
                 // Iterate through each character in each line of dialogue for typewriter effect.
                 GameManager.Instance.SoundManager.PlaySoundByName("typewriter");
@@ -33,8 +73,7 @@ public class DialogueManager : MonoBehaviour
                 yield return new WaitForSecondsRealtime(0.05f);
             }
             yield return new WaitForSecondsRealtime(1f);
-        }
-        dialoguePanel.SetActive(false);
-        Time.timeScale = 1f;
+
+            Time.timeScale = 1f;
     }
 }

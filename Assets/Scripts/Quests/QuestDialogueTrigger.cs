@@ -28,7 +28,7 @@ public class QuestDialogueTrigger : MonoBehaviour
                 hasTriggered = true;
                 if (GameManager.Instance.dialogueManager.DialogueLines.Length > 0)
                 {
-                    GameManager.Instance.dialogueManager.DisplayDialogue();
+                    //GameManager.Instance.dialogueManager.DisplayDialogue();
                     GameManager.Instance.dialogueManager.DialogueLines = new string[0];
                 }
             }       

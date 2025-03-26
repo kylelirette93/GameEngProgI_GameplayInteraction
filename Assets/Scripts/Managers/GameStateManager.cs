@@ -115,7 +115,7 @@ public class GameStateManager : MonoBehaviour
                 break;
             case GameState.Gameplay_State:
                 GameManager.Instance.SoundManager.PlaySoundByName("gameplay");
-                DisableCursor();
+                
                 GameManager.Instance.UIManager.EnableGameplayMenuUI();
                 Time.timeScale = 1;  // Resume gameplay
                 Debug.Log("Entered Gameplay State");

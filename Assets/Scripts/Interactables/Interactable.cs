@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,16 +15,18 @@ public class Interactable : MonoBehaviour, IInteractable
     public InteractableType type;
     public ItemData itemData;
     Inventory inventory;
-    GameObject interactPrompt;
     [SerializeField] string itemId;
 
     [Header("Dialogue Settings")]
     [TextArea] public string[] sentences;
+    public bool isQuestDialogue;
 
     DialogueManager dialogueManager;
 
     // Static dictionary to store whether an interactable has been picked up.
-    static Dictionary<string, bool> isPickedUp = new Dictionary<string, bool>(); 
+    static Dictionary<string, bool> isPickedUp = new Dictionary<string, bool>();
+
+    private bool dialogueStarted = false;
 
     public InteractableType InteractionType => type;
 
@@ -41,8 +42,9 @@ public class Interactable : MonoBehaviour, IInteractable
     void Start()
     {
         inventory = GameManager.Instance.UIManager.inventory;
-        interactPrompt = GameManager.Instance.UIManager.interactionPrompt.gameObject;
         dialogueManager = GameManager.Instance.dialogueManager.GetComponent<DialogueManager>();
+        // Subscribe to delegate.
+        DialogueManager.OnDialogueEnded += DialogueEndedHandler;
     }
     public void Interact()
     {
@@ -56,14 +58,28 @@ public class Interactable : MonoBehaviour, IInteractable
                 if (GameManager.Instance.questManager.quests[itemData.questIndex].isRecieved
                     && GameManager.Instance.questManager.quests[itemData.questIndex].requiredItem == itemData)
                 {
-                    DisplayPrompt();
+                    Pickup();
+                }
+                else
+                {
+                    // If quest is not recieved yet, display info of the item instead.
+                    Info();
                 }
                 break;
             case InteractableType.Info:
-                DisplayPrompt();
+                Info();
                 break;
             case InteractableType.Dialogue:
-                dialogueManager.StartDialogue(sentences);
+                // If dialogue has not started, start it, otherwise display the next sentence.
+                if (!dialogueStarted)
+                {
+                    dialogueManager.StartDialogue(sentences);
+                    dialogueStarted = true;
+                }
+                else                 
+                {
+                    dialogueManager.DisplayNextSentence();
+                }
                 break;
             default:
                 Nothing();
@@ -87,7 +103,6 @@ public class Interactable : MonoBehaviour, IInteractable
                 GameManager.Instance.questManager.QuestUI.UpdateQuestList();
 
                 isPickedUp[itemId] = true;
-                interactPrompt.GetComponent<TextMeshProUGUI>().text = "";
                 gameObject.SetActive(false);
             }
         }
@@ -99,36 +114,8 @@ public class Interactable : MonoBehaviour, IInteractable
         GameManager.Instance.UIManager.SetInteractionText(itemData.infoMessage);
     }
 
-    public void DisplayPrompt()
+    private void DialogueEndedHandler()
     {
-        if (interactPrompt != null)
-        {
-            interactPrompt.SetActive(true);
-            TextMeshProUGUI textObj = interactPrompt.GetComponent<TextMeshProUGUI>();
-
-            textObj.text = "Press <sprite index=0> to interact.\r\n";
-
-            //Debug.Log("DisplayPrompt called. Space key down: " + Input.GetKeyDown(KeyCode.Space));
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (type == InteractableType.Pickup)
-                {
-                    Pickup();
-                }
-                else if (type == InteractableType.Info)
-                {
-                    //Debug.Log("Calling Info()");
-                    Info();
-                }
-            }
-        }
-    }
-
-    public void DisablePrompt()
-    {
-        if (interactPrompt != null)
-        {
-            interactPrompt.SetActive(false);
-        }
+        dialogueStarted = false;
     }
 }

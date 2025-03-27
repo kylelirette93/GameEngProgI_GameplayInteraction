@@ -9,14 +9,14 @@ public class QuestGiver : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            QuestManager questManager = FindObjectOfType<QuestManager>();
+            QuestManager questManager = GameManager.Instance.questManager;
             questManager.CompleteQuest(questTitle);
             foreach (var quest in questManager.quests)
             {
                 if (!quest.isRecieved)
                 {
                     quest.isRecieved = true;
-                    GameManager.Instance.questManager.QuestUI.UpdateQuestList();
+                    questManager.QuestUI.UpdateQuestList();
                 }
             }
         }

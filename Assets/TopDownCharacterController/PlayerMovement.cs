@@ -1,10 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -62,6 +56,18 @@ public class PlayerMovement : MonoBehaviour
         rb2D.velocity = Vector2.zero;
     }
 
+    public bool SetCanMove(bool canMove)
+    {
+        if (canMove)
+        {
+            Actions.MoveEvent += GetInputVector;
+        }
+        else
+        {
+            Actions.MoveEvent -= GetInputVector;
+        }
+        return canMove;
+    }
     void UpdateAnimation()
     {
         bool isMoving = moveVector != Vector2.zero;

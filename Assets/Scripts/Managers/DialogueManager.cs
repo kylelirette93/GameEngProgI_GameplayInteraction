@@ -2,78 +2,99 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
+// Delegate to see if dialogue has ended.
+// Prevents interruption of dialogue until it finishes.
+public delegate void DialogueEnded();
 
 public class DialogueManager : MonoBehaviour
 {
     public GameObject dialoguePanel;
     public string[] DialogueLines;
     public TextMeshProUGUI dialogueText;
-    private Queue<string> dialogue;
+    public Queue<string> dialogue;
+
+    public static event DialogueEnded OnDialogueEnded;
+
+    private Coroutine displayCoroutine; 
+    private string currentSentence; 
 
     private void Start()
     {
+        // Initialize empty queue.
         dialogue = new Queue<string>();
     }
-    /*public void DisplayDialogue()
-    {
-        if (dialogue != null && dialogue.Count > 0)
-        {
-            dialoguePanel.SetActive(true);
-            StartCoroutine(DisplayDialogueCoroutine());
-        }
-        if (DialogueLines != null && DialogueLines.Length > 0)
-        {
-            dialoguePanel.SetActive(true);
-            // Debug.Log("Activating dialogue panel");
-            StartCoroutine(DisplayDialogueCoroutine());
-        }
-    }*/
 
     public void StartDialogue(string[] sentences)
     {
+        // Clear the queue and add the new sentences.
         dialogue.Clear();
         dialoguePanel.SetActive(true);
-        // Queue the dialogue.
+        GameManager.Instance.playerController.SetCanMove(false);
+        GameManager.Instance.GameStateManager.EnableCursor();
         foreach (string currentString in sentences)
-        {          
-             dialogue.Enqueue(currentString);     
+        {
+            // Add each sentence to the queue.
+            dialogue.Enqueue(currentString);
         }
-       
-        DisplayNextSentence();        
+        // Display the first sentence.
+        DisplayNextSentence();
     }
 
     public void DisplayNextSentence()
     {
-        if (dialogue.Count == 0) EndSentence();
-
-        // Debug.Log("Button being clicked");
-        if (dialogue.Count > 0)
+        // If a coroutine is running, stop it and display the full sentence.
+        if (displayCoroutine != null) 
         {
-            string currentSentence = dialogue.Dequeue();
-            StartCoroutine(DisplayDialogueCoroutine(currentSentence));
+            StopCoroutine(displayCoroutine);
+            // Display the full sentence.
+            dialogueText.text = currentSentence; 
+            // Clear the reference so a new coroutine can be started.
+            displayCoroutine = null; 
+            return;
         }
+
+        if (dialogue.Count == 0)
+        {
+            EndSentence();
+            return;
+        }
+
+        // Clear the dialogue text at the start of each sentence.
+        dialogueText.text = "";
+        // Store the current sentence, so it can be displayed in full.
+        currentSentence = dialogue.Dequeue(); 
+        // Store the coroutine so we can stop it abruptly.
+        displayCoroutine = StartCoroutine(DisplayDialogueCoroutine(currentSentence));
     }
 
     public void EndSentence()
     {
-        dialogue.Clear();
+        // When dialogue finishes, clear it, disable panel and reactivate player movement and cursor.
         dialogueText.text = "";
         dialoguePanel.SetActive(false);
+        GameManager.Instance.playerController.SetCanMove(true);
+        GameManager.Instance.GameStateManager.DisableCursor();
+
+        if (OnDialogueEnded != null)
+        {
+            OnDialogueEnded();
+        }
     }
+
     private IEnumerator DisplayDialogueCoroutine(string currentSentence)
     {
-            Time.timeScale = 0f;        
-            foreach (char letter in currentSentence)
+        for (int i = 0; i < currentSentence.Length; i++)
+        {
+            if (GameManager.Instance != null && GameManager.Instance.SoundManager != null)
             {
-                // Iterate through each character in each line of dialogue for typewriter effect.
                 GameManager.Instance.SoundManager.PlaySoundByName("typewriter");
-                dialogueText.text += letter;
-                // Wait for real time so that this still happens when time scale is 0.
-                yield return new WaitForSecondsRealtime(0.05f);
             }
-            yield return new WaitForSecondsRealtime(1f);
-
-            Time.timeScale = 1f;
+            // While coroutine is running, display the sentence letter by letter.
+            dialogueText.text = currentSentence.Substring(0, i + 1); 
+            yield return new WaitForSecondsRealtime(0.05f);
+        }
+        yield return new WaitForSecondsRealtime(1f);
+        displayCoroutine = null; 
     }
 }

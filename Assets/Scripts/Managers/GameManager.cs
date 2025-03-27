@@ -7,11 +7,13 @@ public class GameManager : MonoBehaviour
 {
     // Reference all managers for access and persist across scenes.
     public static GameManager Instance;
+    public GameStateManager GameStateManager;
     public UIManager UIManager;
     public LevelManager levelManager;
     public QuestManager questManager;
     public SoundManager SoundManager;
     public DialogueManager dialogueManager;
+    public PlayerMovement playerController;
 
     private void Awake()
     {

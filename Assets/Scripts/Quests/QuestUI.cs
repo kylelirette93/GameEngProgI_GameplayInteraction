@@ -36,6 +36,7 @@ public class QuestUI : MonoBehaviour
     {
         // Display a temporary message when quest is completed.
         gameObject.SetActive(true);
+        GameManager.Instance.GameStateManager.EnableCursor();
         questListText.text = $"Quest completed, you earned {completedQuest.reward} gold!";
         if (inventory != null)
         {
@@ -46,6 +47,7 @@ public class QuestUI : MonoBehaviour
         
         yield return new WaitForSeconds(3f);
         UpdateQuestList();
+        GameManager.Instance.GameStateManager.DisableCursor();
         gameObject.SetActive(false);
         questManager.quests.Remove(completedQuest);
     }
@@ -56,5 +58,10 @@ public class QuestUI : MonoBehaviour
         {
             inventory.RemoveItemsByValue(completedQuest.requiredItem, completedQuest.condition);
         }
+    }
+
+    public void ClosePanel()     
+    {
+        gameObject.SetActive(false);
     }
 }

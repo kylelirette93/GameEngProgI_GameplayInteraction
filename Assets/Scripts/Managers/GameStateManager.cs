@@ -115,7 +115,7 @@ public class GameStateManager : MonoBehaviour
                 break;
             case GameState.Gameplay_State:
                 GameManager.Instance.SoundManager.PlaySoundByName("gameplay");
-                
+                DisableCursor();
                 GameManager.Instance.UIManager.EnableGameplayMenuUI();
                 Time.timeScale = 1;  // Resume gameplay
                 Debug.Log("Entered Gameplay State");
@@ -169,11 +169,11 @@ public class GameStateManager : MonoBehaviour
         GameManager.Instance.levelManager.LoadScene("MainMenu");
         ChangeState(GameState.MainMenu_State);
     }
-    private void EnableCursor()
+    public void EnableCursor()
     {
         Cursor.visible = true;
     }
-    private void DisableCursor()
+    public void DisableCursor()
     {
         Cursor.visible = false;
     }

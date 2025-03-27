@@ -5,27 +5,35 @@ using UnityEngine;
 public class InteractionController : MonoBehaviour
 {
     public IInteractable interactable = null;
-
+    public GameObject interactPrompt;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("InteractObj"))
         {
             interactable = other.GetComponent<IInteractable>();
-            if (interactable != null)
-            {
-                interactable.Interact();
-            }
+
+            // Place the interact prompt above the interactable object.
+            interactPrompt.SetActive(true);
+            interactPrompt.transform.position = other.transform.position + new Vector3(0, 0.5f, 0);
         }
     }
 
-    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && interactable != null)
+        {
+            interactPrompt.SetActive(false);
+            interactable.Interact();                 
+        }
+    }
+
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("InteractObj"))
         {
-            interactable.DisablePrompt();
+            interactPrompt.SetActive(false);
             interactable = null;
         }
     }

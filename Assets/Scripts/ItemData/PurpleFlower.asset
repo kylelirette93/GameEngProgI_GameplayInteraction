@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 1953289434, guid: e0ea7326c7417f8439d4a846f74a0d72, type: 3}
   itemName: Purple Flower
-  infoMessage: 
+  infoMessage: A purple flower! I wonder what this is for?
   questIndex: 0
